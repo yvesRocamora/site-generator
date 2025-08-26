@@ -142,7 +142,7 @@ export default function App() {
     // Ici, tu peux appeler fetchLLM ou une autre fonction pour le chat
     setChatHistory((h) => [
       ...h,
-      { role: "assistant", content: "Réponse simulée du LLM." },
+      { role: "assistant", content: "Réponse simulée du LLM..." },
     ]);
   };
 
