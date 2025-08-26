@@ -6,5 +6,5 @@ import "./index.css"; // <-- Import du CSS Tailwind
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );

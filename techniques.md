@@ -31,16 +31,19 @@ Créer une application web front-end qui permet à l’utilisateur de générer 
 ## 4. Fonctionnalités
 
 ### 4.1 Génération de site
+
 - L’utilisateur saisit un prompt dans la sidebar.
 - Au clic sur le bouton, le prompt est envoyé à l’API LLM.
 - Le LLM retourne du code HTML utilisant TailwindCSS.
 - Le code est affiché dans une iframe sur l’écran principal.
 
 ### 4.2 Chat interactif
+
 - L’utilisateur peut discuter avec le LLM via la sidebar.
 - Les messages sont affichés dans un historique sous le champ de prompt.
 
 ### 4.3 Sécurité
+
 - Le code HTML généré est affiché dans une iframe pour isoler le rendu.
 - Aucune clé API sensible ne doit être exposée dans le code source.
 
@@ -97,7 +100,9 @@ README.md
 ---
 
 ## 10. Évolutions possibles
+
 v
+
 - Ajout de l’export du site généré
 - Authentification utilisateur
 - Gestion multilingue

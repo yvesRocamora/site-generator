@@ -17,7 +17,7 @@ app.post("/api/mistral", async (req, res) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify(req.body),
     });
@@ -25,7 +25,9 @@ app.post("/api/mistral", async (req, res) => {
     const data = await response.json();
     res.status(response.status).json(data);
   } catch (err) {
-    res.status(500).json({ error: "Erreur proxy Mistral", details: err.message });
+    res
+      .status(500)
+      .json({ error: "Erreur proxy Mistral", details: err.message });
   }
 });
 

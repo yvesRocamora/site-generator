@@ -5,39 +5,42 @@ function Sidebar({ onPrompt, chatHistory, onChat }) {
   const [chatInput, setChatInput] = useState("");
 
   return (
-    <div className="w-80 bg-gray-100 h-screen p-4 flex flex-col">
-      <h2 className="text-xl font-bold mb-4">Générateur de site</h2>
+    <div className="flex h-screen w-80 flex-col bg-gray-100 p-4">
+      <h2 className="mb-4 text-xl font-bold">Générateur de site</h2>
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           onPrompt(prompt);
         }}
         className="mb-6"
       >
-        <label className="block mb-2 font-semibold">Prompt :</label>
+        <label className="mb-2 block font-semibold">Prompt :</label>
         <textarea
-          className="w-full border rounded p-2 mb-2"
+          className="mb-2 w-full rounded border p-2"
           rows={3}
           value={prompt}
-          onChange={e => setPrompt(e.target.value)}
+          onChange={(e) => setPrompt(e.target.value)}
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded w-full"
+          className="w-full rounded bg-blue-600 px-4 py-2 text-white"
         >
           Générer
         </button>
       </form>
-      <div className="flex-1 overflow-y-auto mb-2">
-        <h3 className="font-semibold mb-2">Chat</h3>
+      <div className="mb-2 flex-1 overflow-y-auto">
+        <h3 className="mb-2 font-semibold">Chat</h3>
         <div className="space-y-2">
           {chatHistory.map((msg, i) => (
-            <div key={i} className={msg.role === "user" ? "text-right" : "text-left"}>
+            <div
+              key={i}
+              className={msg.role === "user" ? "text-right" : "text-left"}
+            >
               <span
                 className={
                   msg.role === "user"
-                    ? "inline-block bg-blue-200 px-2 py-1 rounded"
-                    : "inline-block bg-gray-300 px-2 py-1 rounded"
+                    ? "inline-block rounded bg-blue-200 px-2 py-1"
+                    : "inline-block rounded bg-gray-300 px-2 py-1"
                 }
               >
                 {msg.content}
@@ -47,7 +50,7 @@ function Sidebar({ onPrompt, chatHistory, onChat }) {
         </div>
       </div>
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           onChat(chatInput);
           setChatInput("");
@@ -55,14 +58,14 @@ function Sidebar({ onPrompt, chatHistory, onChat }) {
         className="flex"
       >
         <input
-          className="flex-1 border rounded-l p-2"
+          className="flex-1 rounded-l border p-2"
           value={chatInput}
-          onChange={e => setChatInput(e.target.value)}
+          onChange={(e) => setChatInput(e.target.value)}
           placeholder="Message au LLM..."
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded-r"
+          className="rounded-r bg-blue-600 px-4 py-2 text-white"
         >
           Envoyer
         </button>
@@ -73,10 +76,10 @@ function Sidebar({ onPrompt, chatHistory, onChat }) {
 
 function MainView({ html }) {
   return (
-    <div className="flex-1 h-screen bg-white overflow-auto">
+    <div className="h-screen flex-1 overflow-auto bg-white">
       <iframe
         title="Résultat"
-        className="w-full h-full border-0"
+        className="h-full w-full border-0"
         srcDoc={html}
         sandbox="allow-scripts allow-forms"
       />
@@ -90,7 +93,7 @@ async function fetchLLM(prompt) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
       model: "mistral-medium", // ou mistral-small, mistral-large selon ton accès
@@ -98,12 +101,12 @@ async function fetchLLM(prompt) {
         {
           role: "system",
           content:
-            "Tu es un générateur de code HTML Tailwind. Quand tu ajoutes des images, utilise uniquement des balises <img> avec des URLs d’images libres de droits (exemple : https://images.unsplash.com/...). N’utilise pas de balises <img> sans src ou de génération d’images IA."
+            "Tu es un générateur de code HTML Tailwind. Quand tu ajoutes des images, utilise uniquement des balises <img> avec des URLs d’images libres de droits (exemple : https://images.unsplash.com/...). N’utilise pas de balises <img> sans src ou de génération d’images IA.",
         },
-        { role: "user", content: prompt }
+        { role: "user", content: prompt },
       ],
       max_tokens: 1024,
-      temperature: 0.7
+      temperature: 0.7,
     }),
   });
 
@@ -121,26 +124,35 @@ export default function App() {
   const [generatedHtml, setGeneratedHtml] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
 
-  const handlePrompt = async prompt => {
-    setChatHistory(h => [...h, { role: "user", content: prompt }]);
+  const handlePrompt = async (prompt) => {
+    setChatHistory((h) => [...h, { role: "user", content: prompt }]);
     try {
       const html = await fetchLLM(prompt);
-      console.log(html)
+      console.log(html);
       setGeneratedHtml(html);
     } catch (e) {
-      setGeneratedHtml(`<div style="color:red;padding:2rem;">${e.message}</div>`);
+      setGeneratedHtml(
+        `<div style="color:red;padding:2rem;">${e.message}</div>`,
+      );
     }
   };
 
-  const handleChat = async message => {
-    setChatHistory(h => [...h, { role: "user", content: message }]);
+  const handleChat = async (message) => {
+    setChatHistory((h) => [...h, { role: "user", content: message }]);
     // Ici, tu peux appeler fetchLLM ou une autre fonction pour le chat
-    setChatHistory(h => [...h, { role: "assistant", content: "Réponse simulée du LLM." }]);
+    setChatHistory((h) => [
+      ...h,
+      { role: "assistant", content: "Réponse simulée du LLM." },
+    ]);
   };
 
   return (
-    <div className="flex h-screen">
-      <Sidebar onPrompt={handlePrompt} chatHistory={chatHistory} onChat={handleChat} />
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar
+        onPrompt={handlePrompt}
+        chatHistory={chatHistory}
+        onChat={handleChat}
+      />
       <MainView html={generatedHtml} />
     </div>
   );
